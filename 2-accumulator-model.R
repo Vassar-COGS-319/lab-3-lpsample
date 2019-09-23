@@ -15,15 +15,37 @@
 # these parameters more intuitive by taking 1/rate.1 and 1/rate.2 as the values to rexp().
 
 accumulator.model <- function(samples, rate.1=40, rate.2=40, criterion=3){
-  
-
-  output <- data.frame(
+  accuracy.array<- c()
+  rt.array<- c()
+  for (i in 1:samples) { #loop for all samples
+    value.1 <- 0 #initialize variables
+    value.2 <- 0
+    rt<- 0
+    while (value.2 < criterion && value.1 < criterion){
+      rt <- rt+1 #increment rt
+      value.1 <- value.1 + rexp(1, rate = rate.1) #add randomly to value
+      value.2 <- value.2 + rexp(1, rate = rate.2) #add randomly to value
+    }
+    if(value.1 > criterion && value.2 > criterion){ #if both past criterion
+      if (value.1>= value.2){ #if both are over crit and 1 is bigger or = return true
+      accuracy.array[i] <- TRUE
+      }else{ #both are oast and 1 isnt bigger, 2 is so false f
+      accuracy.array[i] <- FALSE
+      }
+      }
+    if (value.1 > criterion && value.2 < criterion){ #if only 1 is past criterion, t
+        accuracy.array[i] <- TRUE
+      } else { #catch all for when value 2 is past but 1 isnt
+        accuracy.array[i] <- FALSE
+    }
+    rt.array[i] <- rt
+  } 
+  output <- data.frame( #set up dataframe
     correct = accuracy.array,
-    rt = rt.array
-  )
-  
+    rt = rt.array)
   return(output)
 }
+
 
 # test the model ####
 

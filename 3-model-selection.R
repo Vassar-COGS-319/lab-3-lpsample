@@ -14,6 +14,14 @@
 
 # You don't need to get a perfect match. Just get in the ballpark. 
 
+rwm.test<- random.walk.model(10, drift = 0, sdrw = 0.3, criterion = 3)
+rwm.sum<- sum(rwm.test$correct) / length(rwm.test$correct) # should be close to 0.5
+rwm.mean <- mean(rwm.test$rt) # should be about
+
+acc.test<- accumulator.model(10, rate.1 = 40, rate.2 = 40, criterion = 3)
+acc.sum<- sum(acc.test$correct) / length(acc.test$correct) # should be close to 0.5
+acc.mean <- mean(acc.test$rt) # should be about
+
 
 # Can both models do a reasonable job of accounting for the mean RT and accuracy? Report the
 # results of your efforts:
