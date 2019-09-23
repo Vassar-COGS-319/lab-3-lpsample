@@ -10,12 +10,25 @@
 # criterion is the threshold for a response (default value is 3)
 
 random.walk.model <- function(samples, drift=0, sdrw=0.3, criterion=3){
-  
-  output <- data.frame(
-    correct = accuracy.array,
-    rt = rt.array
-  )
-  
+  accuracy.array<- c()
+  rt.array<- c()
+  for (i in 1:samples) { #loop for all samples
+    value <- 0 #initialize variables
+    rt <- 0
+    while (value > -criterion && value < criterion){
+      rt <- rt+1 #increment rt
+      value <- value + rnorm(1, drift, sdrw) #add randomly to value
+    }
+    if(value > 0){ #if pos criterion, true, else false, store in accuracy array
+      accuracy.array[i] <- TRUE
+    } else {
+      accuracy.array[i] <- FALSE
+    }
+    rt.array[i] <- rt #store this rt in position i from sample
+  } 
+      output <- data.frame( #set up dataframe
+      correct = accuracy.array,
+      rt = rt.array)
   return(output)
 }
 
@@ -26,8 +39,8 @@ random.walk.model <- function(samples, drift=0, sdrw=0.3, criterion=3){
 # be around 112, but might vary from that by a bit.
 
 initial.test <- random.walk.model(1000)
-sum(initial.test$correct) / length(initial.test$correct) # should be close to 0.5
-mean(initial.test$rt) # should be about 112
+sum<- sum(initial.test$correct) / length(initial.test$correct) # should be close to 0.5
+mean <- mean(initial.test$rt) # should be about 112
 
 # visualize the RT distributions ####
 
